@@ -1,4 +1,5 @@
 ﻿using AireLogic.Api.Entities;
+using AireLogic.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,6 @@ namespace AireLogic.Api
             var connectionString = Configuration["connectionStrings:DBConnectionString"];
             services.AddDbContext<BugTrackerContext>(o => o.UseSqlServer(connectionString));
 
-
             services.AddApplicationInsightsTelemetry();
             services.AddMvc(setupAction =>
             {
@@ -43,6 +43,9 @@ namespace AireLogic.Api
             {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "AireLogic Test", Version = "v1" });
             });
+
+            // register the repository
+            services.AddScoped<BugtrackerRepository, BugtrackerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

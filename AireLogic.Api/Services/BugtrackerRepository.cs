@@ -13,6 +13,7 @@ namespace AireLogic.Api.Services
             bugtrackerContext = context;
         }
 
+        #region people
         public IEnumerable<Person> GetAllPeople()
         {
             return this.bugtrackerContext.People;
@@ -29,14 +30,42 @@ namespace AireLogic.Api.Services
             this.bugtrackerContext.People.Remove(person);            
         }
 
-        public int SaveChanges()
-        {
-            return this.bugtrackerContext.SaveChanges();
-        }
-
         public void AddPerson(Person person)
         {
             this.bugtrackerContext.People.Add(person);
         }
+
+        #endregion
+
+        public int SaveChanges()
+        {
+            return this.bugtrackerContext.SaveChanges();
+        }       
+
+        #region bugs
+
+
+        public void DeleteBug(Guid id)
+        {
+            var bug = this.bugtrackerContext.Bugs.Find(id);
+            this.bugtrackerContext.Bugs.Remove(bug);
+        }
+
+        public void AddBug(Bug bug)
+        {
+            this.bugtrackerContext.Bugs.Add(bug);
+        }
+
+        public IEnumerable<Bug> GetAllBugs()
+        {
+            return this.bugtrackerContext.Bugs;
+        }
+
+        public Bug GetBugById(Guid id)
+        {
+            return this.bugtrackerContext.Bugs.Find(id);
+        }
+
+        #endregion
     }
 }
