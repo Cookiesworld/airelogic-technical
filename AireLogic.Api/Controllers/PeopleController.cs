@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AireLogic.Api.Entities;
 using AireLogic.Api.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AireLogic.Api.Controllers
 {
+    /// <summary>
+    /// Person controller
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class PeopleController : ControllerBase
     {
-        private readonly BugtrackerRepository bugtrackerRepository;
+        private readonly IBugtrackerRepository bugtrackerRepository;
 
-        public PeopleController(BugtrackerRepository bugtrackerRepository)
+        public PeopleController(IBugtrackerRepository bugtrackerRepository)
         {
             this.bugtrackerRepository = bugtrackerRepository ?? throw new ArgumentNullException(nameof(bugtrackerRepository));
         }
