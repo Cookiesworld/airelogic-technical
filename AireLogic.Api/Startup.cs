@@ -39,7 +39,7 @@ namespace AireLogic.Api
             {
                 setupAction.ReturnHttpNotAcceptable = true;
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());                
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
