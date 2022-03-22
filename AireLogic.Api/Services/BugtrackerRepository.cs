@@ -4,7 +4,20 @@ using System.Collections.Generic;
 
 namespace AireLogic.Api.Services
 {
-    public class BugtrackerRepository
+    public interface IBugtrackerRepository
+    {
+        IEnumerable<Person> GetAllPeople();
+        Person GetPersonById(Guid id);
+        void DeletePerson(Guid id);
+        void AddPerson(Person person);
+        int SaveChanges();
+        void DeleteBug(Guid id);
+        void AddBug(Bug bug);
+        IEnumerable<Bug> GetAllBugs();
+        Bug GetBugById(Guid id);        
+    }
+
+    public class BugtrackerRepository : IBugtrackerRepository
     {
         private BugTrackerContext bugtrackerContext;
 

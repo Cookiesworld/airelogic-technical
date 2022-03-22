@@ -13,22 +13,24 @@ namespace AireLogic.Api.Controllers
     [ApiController]
     public class BugsController : ControllerBase
     {
-        private readonly BugtrackerRepository bugtrackerRepository;
+        private readonly IBugtrackerRepository bugtrackerRepository;
 
-        public BugsController(BugtrackerRepository bugtrackerRepository)
+        public BugsController(IBugtrackerRepository bugtrackerRepository)
         {
             this.bugtrackerRepository = bugtrackerRepository ?? throw new ArgumentNullException(nameof(bugtrackerRepository));
         }
 
         // GET: api/Bugs
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<Bug>), StatusCodes.Status200OK)]
         public IEnumerable<Bug> Get()
         {
             return bugtrackerRepository.GetAllBugs();
         }
 
         // GET: api/Bugs/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Bug), StatusCodes.Status200OK)]
         public IActionResult Get(Guid id)
         {
             return Ok(this.bugtrackerRepository.GetBugById(id));
@@ -47,7 +49,7 @@ namespace AireLogic.Api.Controllers
             this.bugtrackerRepository.SaveChanges();
 
             return this.CreatedAtRoute("Get", new { id = bug.Id }, bug);
-        }        
+        }
 
         // DELETE: api/Bugs/5
         [HttpDelete("{id}")]

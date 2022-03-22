@@ -1,4 +1,7 @@
-﻿using AireLogic.Api.Entities;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using AireLogic.Api.Entities;
 using AireLogic.Api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace AireLogic.Api
 {
@@ -29,8 +33,7 @@ namespace AireLogic.Api
             // register the DbContext on the container, getting the connection string from appSettings this during development; in a production environment,
             // it's better to use an environment vairable
             var connectionString = Configuration["connectionStrings:DBConnectionString"];
-            services.AddDbContext<BugTrackerContext>(o => o.UseSqlServer(connectionString));
-
+            services.AddDbContext<BugTrackerContext>(o => o.UseSqlServer(connectionString));            
             services.AddApplicationInsightsTelemetry();
             services.AddMvc(setupAction =>
             {
@@ -41,11 +44,15 @@ namespace AireLogic.Api
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "AireLogic Test", Version = "v1" });
-            });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                             Title = "AireLogic Test", Version = "v1" });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            });            
 
             // register the repository
-            services.AddScoped<BugtrackerRepository, BugtrackerRepository>();
+            services.AddScoped<IBugtrackerRepository, BugtrackerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,8 +74,14 @@ namespace AireLogic.Api
                 app.UseHsts();
             }
 
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseCors();
+
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+            });
         }
     }
 }
