@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { timingSafeEqual } from 'crypto';
-import { Bugmodel } from '../model/bugmodel';
 
 @Injectable({
   providedIn: 'root'
